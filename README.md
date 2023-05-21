@@ -1,5 +1,5 @@
-# docker-win10-eset-protect
-Windows10＋RancharDesktop環境でDockerのESET PROTECTを構築
+# docker-win-eset-protect
+Windows＋RancharDesktop環境でDockerのESET PROTECTを構築
 
 ## 環境
 - OS：Windows 10 Pro 21H2
