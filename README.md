@@ -3,7 +3,8 @@ Windows＋DockerのESET PROTECTを構築
 
 ## 環境
 - OS：Windows 10 Pro 21H2
-- RancharDesktop：1.8.1
+- Rancher Desktop 1.8.1
+- Docker version 23.0.1-rd, build 393499b
 
 
 ## Dockerコマンド
