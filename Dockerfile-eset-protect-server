@@ -32,6 +32,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	samba \
 	python3 \
 	lshw \
+	vim \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Create directories
@@ -77,6 +78,11 @@ RUN install/server-linux-x86_64.sh \
 	--service-user=eset \
 	--service-group=eset \
 	--skip-license \
+	--locale=ja-JP \
+	--cert-hostname=* \
+	--cert-auth-common-name=ULTMARC-CA \
+	--cert-organization=ULTMARC \
+	--cert-country=JP \
 	&& rm -f /install/server-linux-x86_64.sh
 
 # Fix permissions

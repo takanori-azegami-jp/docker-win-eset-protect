@@ -12,8 +12,8 @@ services:
       --log_bin_trust_function_creators=1
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_USER=root
-      - MYSQL_ROOT_PASSWORD=eraadmin
+      - MYSQL_ROOT_USER=${USER}
+      - MYSQL_ROOT_PASSWORD=${PASSWORD}
     volumes:
       - mysql:/var/lib/mysql
 
@@ -25,8 +25,8 @@ services:
       - mysql
     restart: unless-stopped
     environment:
-      - DB_ADMIN_USERNAME=root
-      - DB_ADMIN_PASSWORD=eraadmin
+      - DB_ADMIN_USERNAME=${USER}
+      - DB_ADMIN_PASSWORD=${PASSWORD}
     volumes:
       - eset-protect-server-config:/config
       - eset-protect-server-data:/data

@@ -17,7 +17,7 @@ DB_WAIT_TIME = 300
 
 # Default settings
 SETTINGS = {
-    "locale": None,
+    "locale": "ja-JP",
     "license-key": None,
     "server-port": None,
     "console-port": None,
@@ -31,7 +31,7 @@ SETTINGS = {
     "db-admin-password": None,
     "db-user-username": "era_db_user",
     "db-user-password": "eraadmin",
-    "cert-hostname": "esmc.localhost",
+    "cert-hostname": "*",
     "skip-cert": None,
     "server-cert-path": None,
     "cert-auth-path": None,
@@ -43,7 +43,7 @@ SETTINGS = {
     "cert-organization": None,
     "cert-locality": None,
     "cert-state": None,
-    "cert-country": None,
+    "cert-country": "JP",
     "cert-validity": None,
     "cert-validity-unit": None,
     "enable-imp-program": None,
@@ -61,14 +61,12 @@ class CurrentInstall:
     """Simple class for storing and updating the config"""
 
     def __init__(self):
-
         """Build class from config file"""
         self.config = {}
         self.load_config()
         self.version = None
 
     def load_config(self):
-
         """Load config file"""
         with open("/config/config.cfg", "r") as config_file:
             for line in config_file:
@@ -76,7 +74,6 @@ class CurrentInstall:
                 self.config.update({key: value})
 
     def write_config(self):
-
         """Write config file"""
         with open("/config/config.cfg", "w") as config_file:
             for key, value in self.config.items():
@@ -84,7 +81,6 @@ class CurrentInstall:
 
 
 def is_new_install(current_install):
-
     """Check to see if this is a new install or an upgrade"""
     if current_install.config["ProductInstanceID"]:
         return False
@@ -93,7 +89,6 @@ def is_new_install(current_install):
 
 
 def install_database():
-
     """Create the database"""
     command = [
         "/opt/eset/RemoteAdministrator/Server/setup/installer_backup.sh",
@@ -103,7 +98,6 @@ def install_database():
     ]
 
     for key, value in SETTINGS.items():
-
         if value in ("1", "true"):
             command.append("--{0}".format(key))
 
@@ -117,7 +111,6 @@ def install_database():
 
 
 def write_guid():
-
     """Write the product GUID"""
     with open("/config/config.cfg", "r") as config_cfg:
         config_file = {}
@@ -133,7 +126,6 @@ def write_guid():
 
 
 def write_startup_configuration():
-
     """Create the startup configuration"""
     args = [
         "--db-type",
@@ -158,24 +150,19 @@ def write_startup_configuration():
 
 
 def set_variables():
-
     """Check environment variables and Docker secrets to change settings"""
     for key in SETTINGS:
-
         env_key = key.upper().replace("-", "_")
         if env_key in os.environ:
             SETTINGS[key] = os.environ[env_key]
 
     if os.path.exists("/run/secrets"):
-
         for key in SETTINGS:
-
             if os.path.exists("run/secrets/{0}".format(key)):
                 SETTINGS[key] = open("/run/secrets/{0}".format(key)).read()
 
 
 def custom_action(action, args):
-
     """Call a custom action"""
     cmd = ["/opt/eset/RemoteAdministrator/Server/setup/CustomActions", "-a", action]
 
@@ -185,7 +172,6 @@ def custom_action(action, args):
 
 
 def set_guid():
-
     """Set the product GUID to a user-defined value"""
     if SETTINGS["product-guid"]:
         return
@@ -229,7 +215,6 @@ def set_guid():
 
 
 def wait_for_db():
-
     """Wait for database port to be available"""
     host = SETTINGS["db-hostname"]
     port = SETTINGS["db-port"]
@@ -251,7 +236,6 @@ def wait_for_db():
 
 
 def is_upgrade(current_install):
-
     """Check to see if we need to upgrade"""
     install = "/opt/eset/RemoteAdministrator/Server/setup/installer_backup.sh"
     with open(install, "rb") as installer:
@@ -279,7 +263,6 @@ def is_upgrade(current_install):
 
 
 def set_upgrade_in_installer():
-
     """Set "is_updating" to true to set installer to update mode"""
     command = [
         "/bin/sed",
@@ -292,7 +275,6 @@ def set_upgrade_in_installer():
 
 
 def upgrade(current_install):
-
     """Upgrade the installation"""
     args = [
         "--startup-config-path",
@@ -352,7 +334,6 @@ def upgrade(current_install):
 
 
 def bypass_root():
-
     """Trick for bypassing install script root check"""
     command = [
         "/bin/sed",
@@ -365,14 +346,12 @@ def bypass_root():
 
 
 def killer(signum, frame):
-
     """Handle SIGTERM for graceful shutdowns"""
     pid = int(subprocess.check_output(["pidof", "ERAServer"]))
     os.kill(pid, signum)
 
 
 def main():
-
     """Install ESMC database if needed and run it"""
     current_install = CurrentInstall()
     bypass_root()

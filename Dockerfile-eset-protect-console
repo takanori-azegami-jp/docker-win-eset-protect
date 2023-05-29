@@ -21,7 +21,7 @@ COPY eset-protect-console/index.html /usr/local/tomcat/webapps/ROOT/index.html
 COPY eset-protect-console/context.xml /usr/local/tomcat/conf/context.xml
 COPY eset-protect-console/run.sh /run.sh
 COPY eset-protect-console/healthcheck.sh /healthcheck.sh
-RUN chmod +x \
+RUN chmod +rx \
 	/run.sh \
 	/healthcheck.sh
 
