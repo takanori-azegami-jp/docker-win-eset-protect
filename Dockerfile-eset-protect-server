@@ -104,6 +104,11 @@ RUN cp /opt/eset/RemoteAdministrator/Server/ReportPrinterTool /opt/eset/RemoteAd
 COPY eset-protect-server/ReportPrinterTool /opt/eset/RemoteAdministrator/Server/ReportPrinterTool
 RUN chmod 755 /opt/eset/RemoteAdministrator/Server/ReportPrinterTool
 
+# Kerberos
+COPY eset-protect-server/krb5.conf /etc/krb5.conf
+RUN echo "dns_lookup_realm = true" >> /etc/krb5.conf
+RUN echo "dns_lookup_kdc = true" >> /etc/krb5.conf
+
 # Ports
 EXPOSE 2222 2223
 
